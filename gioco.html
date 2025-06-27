@@ -2,41 +2,204 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Gioca con il memory!" />
-    <link rel="stylesheet" href="css/stile_gioco.css" />
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GheshinMerDact - Gioco</title>
+    <link rel="icon" type="image/png" href="immagini/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
-    <script src="js/menu.js" defer></script>
-    <script src="js/gioco.js" defer></script>
-    <title>Gioco</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #1f4037, #99f2c8);
+            color: white;
+            padding: 20px;
+        }
+        .menu-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        .menu-button {
+            background-color: #333;
+            color: white;
+            font-size: 24px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .menu {
+            display: none;
+            background-color: #444;
+            border-radius: 5px;
+            position: absolute;
+            top: 50px;
+            left: 0;
+            width: 200px;
+            padding: 10px;
+        }
+        .menu ul {
+            list-style: none;
+            padding: 0;
+        }
+        .menu ul li {
+            margin: 10px 0;
+        }
+        .menu ul li a {
+            color: white;
+            font-size: 18px;
+            text-decoration: none;
+            display: block;
+            padding: 5px;
+        }
+        .menu ul li a:hover {
+            background-color: #666;
+        }
+        .menu.show {
+            display: block;
+        }
+        .game-wrapper {
+            max-width: 800px;
+            margin: 100px auto 50px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        .instructions {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 80px);
+            gap: 15px;
+            justify-content: center;
+            margin: 0 auto;
+        }
+        .card {
+            width: 70px;
+            height: 100px;
+            background-color: #fff;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 48px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #1f4037;
+            transform: rotateY(0deg);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        .card.flipped {
+            background-color: #ff5e62;
+            color: white;
+        }
+        .status {
+            margin-top: 30px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            color: #aaa;
+            background-color: #111;
+        }
+    </style>
 </head>
 <body>
-
-    <!-- Menu a tendina -->
     <div class="menu-container">
         <button class="menu-button" onclick="toggleMenu()">☰ Menu</button>
         <div id="menu" class="menu">
             <ul>
-                <li><a href="home">Home</a></li>
-                <li><a href="clips">Clips</a></li>
+                <li><a href="index">Home</a></li>
+                <li><a href="senza-senso">Senza Senso</a></li>
                 <li><a href="gioco">Gioco</a></li>
-                <li><a href="nosense">NoSense</a></li>
-                <li><a href="chat">Chat</a></li>
             </ul>
         </div>
     </div>
-
     <main class="game-wrapper">
-        <h1>Memory Game</h1>
+        <h1>Gioco</h1>
         <p class="instructions">Trova tutte le coppie nel minor tempo possibile!</p>
         <div class="game-grid" id="gameBoard"></div>
         <p class="status" id="gameStatus"></p>
     </main>
-
     <footer>
         <p>&copy; 2025 GheshinMerDact. Tutti i diritti riservati.</p>
     </footer>
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('menu');
+            menu.classList.toggle('show');
+        }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const symbols = ['🍕', '🎈', '🐱', '🚀', '🌈', '🍩', '🎮', '🐸'];
+            let cards = [...symbols, ...symbols];
+            let firstCard = null;
+            let lockBoard = false;
+            let matches = 0;
 
+            const gameBoard = document.getElementById("gameBoard");
+            const status = document.getElementById("gameStatus");
+
+            shuffle(cards);
+
+            cards.forEach(symbol => {
+                const card = document.createElement("div");
+                card.classList.add("card");
+                card.dataset.symbol = symbol;
+                card.innerHTML = "❓";
+                card.addEventListener("click", flipCard);
+                gameBoard.appendChild(card);
+            });
+
+            function flipCard() {
+                if (lockBoard || this.classList.contains("flipped")) return;
+
+                this.classList.add("flipped");
+                this.innerHTML = this.dataset.symbol;
+
+                if (!firstCard) {
+                    firstCard = this;
+                    return;
+                }
+
+                if (firstCard.dataset.symbol === this.dataset.symbol) {
+                    matches++;
+                    firstCard = null;
+                    if (matches === symbols.length) {
+                        status.textContent = "🎉 Hai vinto! Complimenti!";
+                    }
+                } else {
+                    lockBoard = true;
+                    setTimeout(() => {
+                        firstCard.classList.remove("flipped");
+                        this.classList.remove("flipped");
+                        firstCard.innerHTML = "❓";
+                        this.innerHTML = "❓";
+                        firstCard = null;
+                        lockBoard = false;
+                    }, 1000);
+                }
+            }
+
+            function shuffle(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+            }
+        });
+    </script>
 </body>
 </html>
