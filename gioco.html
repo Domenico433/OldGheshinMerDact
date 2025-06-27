@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Gioca con il memory!" />
+    <link rel="stylesheet" href="css/stile_gioco.css" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+    <script src="js/menu.js" defer></script>
+    <script src="js/gioco.js" defer></script>
+    <title>Gioco</title>
+</head>
+<body>
+
+    <!-- Menu a tendina -->
+    <div class="menu-container">
+        <button class="menu-button" onclick="toggleMenu()">☰ Menu</button>
+        <div id="menu" class="menu">
+            <ul>
+                <li><a href="home">Home</a></li>
+                <li><a href="clips">Clips</a></li>
+                <li><a href="gioco">Gioco</a></li>
+                <li><a href="nosense">NoSense</a></li>
+                <li><a href="chat">Chat</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <main class="game-wrapper">
+        <h1>Memory Game</h1>
+        <p class="instructions">Trova tutte le coppie nel minor tempo possibile!</p>
+        <div class="game-grid" id="gameBoard"></div>
+        <p class="status" id="gameStatus"></p>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 GheshinMerDact. Tutti i diritti riservati.</p>
+    </footer>
+
+</body>
+</html>
