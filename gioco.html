@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>GheshinMerDact - Gioco</title>
     <link rel="icon" type="image/png" href="immagini/favicon.png">
@@ -16,8 +16,7 @@
         body {
             font-family: 'Montserrat', sans-serif;
             background: linear-gradient(135deg, #1f4037, #99f2c8);
-            color: white;
-            padding: 20px;
+            color: #fff;
         }
         .menu-container {
             position: absolute;
@@ -32,11 +31,13 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
         }
         .menu {
             display: none;
             background-color: #444;
             border-radius: 5px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
             position: absolute;
             top: 50px;
             left: 0;
@@ -53,28 +54,55 @@
         .menu ul li a {
             color: white;
             font-size: 18px;
-            text-decoration: none;
             display: block;
             padding: 5px;
+            border-radius: 3px;
+            text-decoration: none;
         }
         .menu ul li a:hover {
             background-color: #666;
         }
         .menu.show {
             display: block;
+            animation: slideIn 0.3s ease-in-out;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 70vh;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 20px;
+        }
+        .hero-content h1 {
+            font-size: 41px;
+            margin-bottom: 20px;
+        }
+        .hero-content p {
+            font-size: 20px;
+        }
+        footer {
+            background-color: #111;
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            color: #aaa;
         }
         .game-wrapper {
             max-width: 800px;
             margin: 100px auto 50px;
             text-align: center;
-        }
-        h1 {
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
-        .instructions {
-            font-size: 18px;
-            margin-bottom: 20px;
         }
         .game-grid {
             display: grid;
@@ -106,13 +134,6 @@
             font-size: 20px;
             font-weight: bold;
         }
-        footer {
-            text-align: center;
-            padding: 20px;
-            font-size: 14px;
-            color: #aaa;
-            background-color: #111;
-        }
     </style>
 </head>
 <body>
@@ -126,9 +147,13 @@
             </ul>
         </div>
     </div>
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Gioco</h1>
+            <p>Trova tutte le coppie nel minor tempo possibile!</p>
+        </div>
+    </header>
     <main class="game-wrapper">
-        <h1>Gioco</h1>
-        <p class="instructions">Trova tutte le coppie nel minor tempo possibile!</p>
         <div class="game-grid" id="gameBoard"></div>
         <p class="status" id="gameStatus"></p>
     </main>
@@ -140,8 +165,7 @@
             const menu = document.getElementById('menu');
             menu.classList.toggle('show');
         }
-    </script>
-    <script>
+
         document.addEventListener("DOMContentLoaded", () => {
             const symbols = ['🍕', '🎈', '🐱', '🚀', '🌈', '🍩', '🎮', '🐸'];
             let cards = [...symbols, ...symbols];
